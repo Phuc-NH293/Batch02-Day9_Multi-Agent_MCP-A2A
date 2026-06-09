@@ -9,6 +9,10 @@ import asyncio
 import os
 import sys
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from dotenv import load_dotenv
@@ -81,6 +85,27 @@ LEGAL_KNOWLEDGE = [
             "public interest (Winter v. Natural Resources Defense Council, 2008)."
         ),
     },
+    {
+        "id": "labor_law",
+        "keywords": [
+            "lao động",
+            "lao dong",
+            "sa thải",
+            "sa thai",
+            "hợp đồng lao động",
+            "hop dong lao dong",
+            "labor",
+            "termination",
+        ],
+        "text": (
+            "Theo Bộ luật Lao động Việt Nam 2019, người sử dụng lao động có thể đơn phương "
+            "chấm dứt hợp đồng trong các trường hợp: (1) người lao động thường xuyên không "
+            "hoàn thành công việc; (2) bị ốm đau, tai nạn đã điều trị 12 tháng chưa khỏi; "
+            "(3) thiên tai, hỏa hoạn; (4) người lao động đủ tuổi nghỉ hưu. Nếu chấm dứt "
+            "trái luật, người sử dụng lao động có thể phải nhận người lao động trở lại, "
+            "trả lương, đóng bảo hiểm và bồi thường theo luật."
+        ),
+    },
 ]
 
 
@@ -91,10 +116,10 @@ LEGAL_KNOWLEDGE = [
 @tool
 def search_legal_database(query: str) -> str:
     """Search the legal knowledge base for relevant statutes, case law, and legal principles."""
-    query_words = set(query.lower().split())
+    query_lower = query.lower()
     scored = []
     for entry in LEGAL_KNOWLEDGE:
-        overlap = len(query_words & set(entry["keywords"]))
+        overlap = sum(1 for keyword in entry["keywords"] if keyword in query_lower)
         if overlap > 0:
             scored.append((overlap, entry))
     scored.sort(key=lambda x: x[0], reverse=True)
@@ -135,9 +160,35 @@ def calculate_damages(breach_type: str, contract_value: float) -> str:
     )
 
 
-TOOLS = [search_legal_database, calculate_damages]
+@tool
+def check_statute_of_limitations(case_type: str) -> str:
+    """Check the statute of limitations for a case type.
 
-QUESTION = "What are the legal consequences if a company breaches a non-disclosure agreement?"
+    Args:
+        case_type: Case type, for example contract, tort, property, or labor.
+    """
+    case_type_lower = case_type.lower()
+    limits = {
+        "contract": "4 years under UCC § 2-725 for many sale-of-goods contract claims.",
+        "tort": "2-3 years depending on jurisdiction and claim type.",
+        "property": "5 years for many property-related claims.",
+        "labor": "1 year for many individual labor disputes under Vietnamese labor procedure.",
+        "lao động": "1 năm đối với nhiều tranh chấp lao động cá nhân theo pháp luật Việt Nam.",
+        "lao dong": "1 năm đối với nhiều tranh chấp lao động cá nhân theo pháp luật Việt Nam.",
+    }
+
+    for key, value in limits.items():
+        if key in case_type_lower:
+            return value
+    return "Unknown case type. Try: contract, tort, property, labor, or lao động."
+
+
+TOOLS = [search_legal_database, calculate_damages, check_statute_of_limitations]
+
+QUESTION = (
+    "Một công ty sa thải nhân viên ở Việt Nam và có tranh chấp hợp đồng lao động. "
+    "Quy định chính và thời hiệu khởi kiện là gì?"
+)
 
 
 async def main():
@@ -162,8 +213,10 @@ async def main():
         SystemMessage(
             content=(
                 "You are a legal expert with access to a legal knowledge base and a damage "
-                "calculator. Use the tools provided to ground your analysis in specific statutes "
-                "and case law. Always search the database before answering. "
+                "calculator, plus a statute-of-limitations checker. Use the tools provided to "
+                "ground your analysis in specific statutes and case law. Always search the "
+                "database before answering. If the question asks about deadlines or limitation "
+                "periods, call check_statute_of_limitations. "
                 "Keep your final response under 400 words."
             )
         ),

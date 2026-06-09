@@ -26,8 +26,29 @@ LEGAL_KNOWLEDGE = [
             "(4) cover damages. Statute of limitations is typically 4 years (UCC § 2-725)."
         ),
     },
-    # TODO: Thêm entry về luật lao động Việt Nam
-    # Gợi ý: id="labor_law", keywords=["lao động", "sa thải", ...], text="..."
+    {
+        "id": "labor_law",
+        "keywords": [
+            "lao động",
+            "lao dong",
+            "sa thải",
+            "sa thai",
+            "hợp đồng lao động",
+            "hop dong lao dong",
+            "tiền lương",
+            "tien luong",
+            "tranh chấp lao động",
+            "tranh chap lao dong",
+            "người lao động",
+            "nguoi lao dong",
+        ],
+        "text": (
+            "Theo Bộ luật Lao động Việt Nam, tranh chấp lao động thường liên quan đến "
+            "hợp đồng lao động, tiền lương, kỷ luật lao động, sa thải, đơn phương chấm dứt "
+            "hợp đồng và bồi thường. Người lao động có thể yêu cầu hòa giải, trọng tài lao "
+            "động hoặc khởi kiện ra tòa tùy loại tranh chấp."
+        ),
+    },
 ]
 
 
@@ -41,21 +62,40 @@ def search_legal_knowledge(query: str) -> str:
     return "Không tìm thấy thông tin liên quan."
 
 
-# TODO: Tạo tool check_statute_of_limitations
-# Gợi ý: nhận case_type (str), trả về thời hiệu khởi kiện
-# @tool
-# def check_statute_of_limitations(case_type: str) -> str:
-#     """Kiểm tra thời hiệu khởi kiện."""
-#     # YOUR CODE HERE
-#     pass
+@tool
+def check_statute_of_limitations(case_type: str) -> str:
+    """Kiểm tra thời hiệu khởi kiện theo loại vụ việc."""
+    case_type_lower = case_type.lower()
+
+    if any(kw in case_type_lower for kw in ["ucc", "contract", "hợp đồng", "hop dong"]):
+        return (
+            "Thời hiệu tham khảo cho tranh chấp hợp đồng: 3 năm theo pháp luật dân sự/"
+            "thương mại Việt Nam; riêng hợp đồng mua bán hàng hóa theo UCC thường là 4 năm "
+            "(UCC § 2-725)."
+        )
+
+    if any(kw in case_type_lower for kw in ["lao động", "lao dong", "sa thải", "sa thai"]):
+        return (
+            "Thời hiệu tham khảo cho tranh chấp lao động cá nhân: thường là 1 năm kể từ ngày "
+            "phát hiện quyền/lợi ích hợp pháp bị xâm phạm. Một số loại yêu cầu có thể có "
+            "mốc thời gian riêng."
+        )
+
+    if any(kw in case_type_lower for kw in ["tort", "dân sự", "dan su", "bồi thường", "boi thuong"]):
+        return "Thời hiệu tham khảo cho yêu cầu bồi thường/tranh chấp dân sự: thường là 3 năm."
+
+    return (
+        "Chưa xác định được loại vụ việc. Hãy nêu rõ ví dụ: 'hợp đồng', 'lao động', "
+        "'sa thải' hoặc 'bồi thường dân sự'."
+    )
 
 
 async def main():
     load_dotenv()
     llm = get_llm()
     
-    # TODO: Thêm tool mới vào danh sách
-    tools = [search_legal_knowledge]  # Thêm check_statute_of_limitations vào đây
+    tools = [search_legal_knowledge, check_statute_of_limitations]
+    tool_map = {tool_item.name: tool_item for tool_item in tools}
     llm_with_tools = llm.bind_tools(tools)
     
     question = "Thời hiệu khởi kiện vụ vi phạm hợp đồng là bao lâu?"
@@ -76,10 +116,9 @@ async def main():
         for tool_call in response.tool_calls:
             print(f"🔧 Gọi tool: {tool_call['name']}")
             tool_result = None
-            
-            if tool_call["name"] == "search_legal_knowledge":
-                tool_result = search_legal_knowledge.invoke(tool_call["args"])
-            # TODO: Thêm xử lý cho check_statute_of_limitations
+            tool_fn = tool_map.get(tool_call["name"])
+            if tool_fn:
+                tool_result = tool_fn.invoke(tool_call["args"])
             
             if tool_result:
                 messages.append(ToolMessage(content=tool_result, tool_call_id=tool_call["id"]))

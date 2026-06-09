@@ -11,6 +11,10 @@ import asyncio
 import os
 import sys
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from dotenv import load_dotenv
@@ -172,18 +176,43 @@ def check_compliance_requirements(industry: str, company_size: str) -> str:
     )
 
 
-TOOLS = [search_legal_database, calculate_penalty, check_compliance_requirements]
+@tool
+def search_case_law(keywords: str) -> str:
+    """Search case law by keyword.
+
+    Args:
+        keywords: Keywords to search for.
+    """
+    cases = {
+        "breach": "Hadley v. Baxendale (1854) - consequential damages for breach of contract.",
+        "negligence": "Donoghue v. Stevenson (1932) - duty of care in negligence.",
+        "contract": "Carlill v. Carbolic Smoke Ball Co (1893) - unilateral contract formation.",
+    }
+
+    keywords_lower = keywords.lower()
+    for key, case in cases.items():
+        if key in keywords_lower:
+            return case
+    return "No matching case law found."
+
+
+TOOLS = [
+    search_legal_database,
+    calculate_penalty,
+    check_compliance_requirements,
+    search_case_law,
+]
 
 QUESTION = (
-    "A tech startup with $5M revenue was caught sharing user data without consent "
-    "and failed to pay taxes on overseas revenue. What are all the legal consequences?"
+    "A company breached a contract and caused foreseeable consequential damages. "
+    "What legal remedies and case law apply?"
 )
 
 SYSTEM_PROMPT = (
     "You are a legal analyst agent. You have access to tools for searching legal databases, "
-    "calculating penalties, and checking compliance requirements. Use these tools to build "
-    "a comprehensive analysis. Search for each legal area separately — data privacy, tax, "
-    "and compliance. Keep your final answer under 500 words."
+    "calculating penalties, checking compliance requirements, and finding case law. Use these "
+    "tools to build a comprehensive analysis. When a question asks about breach of contract, "
+    "search both the legal database and case law. Keep your final answer under 500 words."
 )
 
 
@@ -205,7 +234,7 @@ async def main():
     print("-" * 70)
 
     llm = get_llm()
-    graph = create_react_agent(model=llm, tools=TOOLS, prompt=SYSTEM_PROMPT)
+    graph = create_react_agent(model=llm, tools=TOOLS, prompt=SYSTEM_PROMPT, debug=True)
 
     inputs = {"messages": [{"role": "user", "content": QUESTION}]}
 

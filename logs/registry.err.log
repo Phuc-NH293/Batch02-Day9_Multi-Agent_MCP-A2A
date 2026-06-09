@@ -1,0 +1,22 @@
+2026-06-09 16:11:51,642 [registry] INFO Starting Registry on port 10000
+INFO:     Started server process [7728]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:10000 (Press CTRL+C to quit)
+2026-06-09 16:11:56,172 [registry] INFO Registered agent 'compliance-agent' at http://localhost:10103 (tasks=['compliance_question'])
+2026-06-09 16:11:56,175 [registry] INFO Registered agent 'tax-agent' at http://localhost:10102 (tasks=['tax_question'])
+2026-06-09 16:11:57,812 [registry] INFO Registered agent 'law-agent' at http://localhost:10101 (tasks=['legal_question'])
+2026-06-09 16:12:00,604 [registry] INFO Registered agent 'customer-agent' at http://localhost:10100 (tasks=[])
+2026-06-09 16:12:26,693 [registry] INFO Discovered agent 'law-agent' for task 'legal_question'
+2026-06-09 16:12:34,272 [registry] INFO Discovered agent 'tax-agent' for task 'tax_question'
+2026-06-09 16:12:34,274 [registry] INFO Discovered agent 'compliance-agent' for task 'compliance_question'
+2026-06-09 16:13:46,176 [registry] INFO Discovered agent 'law-agent' for task 'legal_question'
+2026-06-09 16:13:52,597 [registry] INFO Discovered agent 'tax-agent' for task 'tax_question'
+2026-06-09 16:13:52,598 [registry] INFO Discovered agent 'compliance-agent' for task 'compliance_question'
+2026-06-09 16:18:02,000 [registry] INFO Discovered agent 'law-agent' for task 'legal_question'
+2026-06-09 16:18:13,088 [registry] INFO Discovered agent 'tax-agent' for task 'tax_question'
+2026-06-09 16:25:55,425 [registry] INFO Discovered agent 'law-agent' for task 'legal_question'
+2026-06-09 16:26:02,901 [registry] INFO Discovered agent 'compliance-agent' for task 'compliance_question'
+2026-06-09 16:26:02,903 [registry] INFO Discovered agent 'tax-agent' for task 'tax_question'
+2026-06-09 16:26:34,513 [registry] INFO Discovered agent 'law-agent' for task 'legal_question'
+2026-06-09 16:26:40,937 [registry] INFO Discovered agent 'compliance-agent' for task 'compliance_question'

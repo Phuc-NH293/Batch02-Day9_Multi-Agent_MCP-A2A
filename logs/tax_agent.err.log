@@ -1,0 +1,23 @@
+2026-06-09 16:11:56,177 [tax_agent] INFO HTTP Request: POST http://localhost:10000/register "HTTP/1.1 200 OK"
+2026-06-09 16:11:56,178 [tax_agent] INFO Registered with registry (attempt 1)
+2026-06-09 16:11:56,180 [tax_agent] INFO Tax Agent listening on port 10102
+INFO:     Started server process [25000]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:10102 (Press CTRL+C to quit)
+2026-06-09 16:12:34,917 [tax_agent] WARNING Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+2026-06-09 16:12:34,926 [tax_agent] INFO TaxAgent executing | task=5635940d-2b9c-4f99-8b04-5237c3872865 context=34542adc-6c91-4019-bff0-355b2aaed303 trace=77074491-3d33-41c5-93a8-2aa76b1bc3ba depth=2
+2026-06-09 16:12:36,000 [tax_agent] INFO Task not found or task_id not set. Creating new task for event (task_id: 5635940d-2b9c-4f99-8b04-5237c3872865, context_id: 34542adc-6c91-4019-bff0-355b2aaed303).
+2026-06-09 16:12:37,057 [tax_agent] INFO HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-09 16:13:53,017 [tax_agent] WARNING Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+2026-06-09 16:13:53,024 [tax_agent] INFO TaxAgent executing | task=f6dcd462-4932-46c3-b37b-be627cf6ba54 context=a43b211e-a208-4978-8a9f-df4cd41d0764 trace=f3c2782a-415e-42f4-a9b2-550fa5c70a23 depth=2
+2026-06-09 16:13:53,026 [tax_agent] INFO Task not found or task_id not set. Creating new task for event (task_id: f6dcd462-4932-46c3-b37b-be627cf6ba54, context_id: a43b211e-a208-4978-8a9f-df4cd41d0764).
+2026-06-09 16:13:54,496 [tax_agent] INFO HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-09 16:18:13,525 [tax_agent] WARNING Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+2026-06-09 16:18:13,537 [tax_agent] INFO TaxAgent executing | task=603f52bc-c5ed-4af3-8d04-e3bd41e5b977 context=d69f1260-cc51-42da-bed7-4d5936e8b50f trace=7ed1a267-3d68-4fac-b530-96fc9e988726 depth=2
+2026-06-09 16:18:13,541 [tax_agent] INFO Task not found or task_id not set. Creating new task for event (task_id: 603f52bc-c5ed-4af3-8d04-e3bd41e5b977, context_id: d69f1260-cc51-42da-bed7-4d5936e8b50f).
+2026-06-09 16:18:14,532 [tax_agent] INFO HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-09 16:26:03,576 [tax_agent] WARNING Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+2026-06-09 16:26:03,596 [tax_agent] INFO TaxAgent executing | task=2f37ae83-0887-4e91-89f5-185b16fe0ca6 context=8b4492af-91b4-43af-b193-31087c60bb9a trace=d6d6efe6-1021-430e-84fc-50ce0db46fef depth=2
+2026-06-09 16:26:03,630 [tax_agent] INFO Task not found or task_id not set. Creating new task for event (task_id: 2f37ae83-0887-4e91-89f5-185b16fe0ca6, context_id: 8b4492af-91b4-43af-b193-31087c60bb9a).
+2026-06-09 16:26:04,663 [tax_agent] INFO HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"

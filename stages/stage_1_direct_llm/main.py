@@ -11,6 +11,10 @@ import asyncio
 import os
 import sys
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 # Allow running directly: python stages/stage_1_direct_llm/main.py
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -19,7 +23,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 from common.llm import get_llm
 
-QUESTION = "What are the legal consequences if a company breaches a non-disclosure agreement?"
+QUESTION = "Nếu công ty đơn phương chấm dứt hợp đồng lao động trái luật thì hậu quả pháp lý là gì?"
 
 
 async def main():
